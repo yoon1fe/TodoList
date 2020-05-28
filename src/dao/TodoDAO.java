@@ -32,7 +32,7 @@ public class TodoDAO {
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			
-			if(rs.next()) {
+			while(rs.next()) {
 				long id = rs.getLong(1);
 				String title = rs.getString(2);
 				String name = rs.getString("name");
@@ -40,7 +40,12 @@ public class TodoDAO {
 				String type = rs.getString("type");
 				Timestamp regDate = rs.getTimestamp("regdate");
 				
-				todos.add(new TodoDTO(id, title, name, seq, type, regDate));
+				TodoDTO todoTemp = new TodoDTO(title, name, seq);
+				todoTemp.setId(id);
+				todoTemp.setType(type);
+				todoTemp.setRegDate(regDate);
+				
+				todos.add(todoTemp);
 			}
 			
 		}catch (Exception e) {
@@ -93,7 +98,12 @@ public class TodoDAO {
 				String type = rs.getString("type");
 				Timestamp regDate = rs.getTimestamp("regdate");
 				
-				doings.add(new TodoDTO(id, title, name, seq, type, regDate));
+				TodoDTO todoTemp = new TodoDTO(title, name, seq);
+				todoTemp.setId(id);
+				todoTemp.setType(type);
+				todoTemp.setRegDate(regDate);
+				
+				doings.add(todoTemp);
 			}
 			
 		}catch (Exception e) {
@@ -146,7 +156,12 @@ public class TodoDAO {
 				String type = rs.getString("type");
 				Timestamp regDate = rs.getTimestamp("regdate");
 				
-				dones.add(new TodoDTO(id, title, name, seq, type, regDate));
+				TodoDTO todoTemp = new TodoDTO(title, name, seq);
+				todoTemp.setId(id);
+				todoTemp.setType(type);
+				todoTemp.setRegDate(regDate);
+				
+				dones.add(todoTemp);
 			}
 			
 		}catch (Exception e) {
@@ -178,5 +193,42 @@ public class TodoDAO {
 		return dones;
 	}
 
+	public void addTodo(TodoDTO todo) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			conn = DriverManager.getConnection(dburl, dbUser, dbPw);
+			String sql = "insert into todo(title, name, sequence) values(?, ?, ?)";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, todo.getTitle());
+			pstmt.setString(2,  todo.getName());
+			pstmt.setInt(3,  todo.getSequence());
+			
+			pstmt.executeUpdate();
+			
+			
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+	}
 	
 }

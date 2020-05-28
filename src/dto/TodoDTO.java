@@ -4,27 +4,24 @@ import java.sql.Date;
 import java.sql.Timestamp;
 
 public class TodoDTO {
-	public long id;
-	public String title;
-	public String name;
-	public int sequence;
-	public String type;
-	public Timestamp regDate;
+	private long id;
+	private String title;
+	private String name;
+	private int sequence;
+	private String type;
+	private Timestamp regDate;
 	
-	public TodoDTO(long id, String title, String name, int sequence, String type, Timestamp regDate) {
+	public TodoDTO(String title, String name, int sequence) {
 		super();
-		this.id = id;
 		this.title = title;
 		this.name = name;
 		this.sequence = sequence;
-		this.type = type;
-		this.regDate = regDate;
 	}
 
 	public long getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	public String getTitle() {
